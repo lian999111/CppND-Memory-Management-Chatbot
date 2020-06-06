@@ -36,17 +36,17 @@ ChatLogic::~ChatLogic()
     // delete chatbot instance
     delete _chatBot;
 
-    // No need to delete all nodes
+    // No need to delete nodes
     // for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it)
     // {
     //     delete *it;
     // }
 
-    // delete all edges
-    for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
-    {
-        delete *it;
-    }
+    // No need to delete edges
+    // for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
+    // {
+    //     delete *it;
+    // }
 
     ////
     //// EOF STUDENT CODE
@@ -162,18 +162,19 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                             auto parentNode = std::find_if(_nodes.begin(), _nodes.end(), [&parentToken](const std::unique_ptr<GraphNode> &node) { return node->GetID() == std::stoi(parentToken->second); });
                             auto childNode = std::find_if(_nodes.begin(), _nodes.end(), [&childToken](const std::unique_ptr<GraphNode> &node) { return node->GetID() == std::stoi(childToken->second); });
 
-                            // create new edge
-                            GraphEdge *edge = new GraphEdge(id);
+                            // create new edge as unique_ptr
+                            auto edge = std::make_unique<GraphEdge>(id);
                             edge->SetChildNode((*childNode).get());
                             edge->SetParentNode((*parentNode).get());
-                            _edges.push_back(edge);
+                            // ChatLogic doesn't own ptrs to edges anymore after adaptation
+                            //_edges.push_back(edge;   
 
                             // find all keywords for current node
                             AddAllTokensToElement("KEYWORD", tokens, *edge);
 
                             // store reference in child node and parent node
-                            (*childNode)->AddEdgeToParentNode(edge);
-                            (*parentNode)->AddEdgeToChildNode(edge);
+                            (*childNode)->AddEdgeToParentNode(edge.get());      // pass the raw ptr to the edge to the child node
+                            (*parentNode)->AddEdgeToChildNode(std::move(edge)); // move the unique_ptr to the edge to the parent node 
                         }
 
                         ////
