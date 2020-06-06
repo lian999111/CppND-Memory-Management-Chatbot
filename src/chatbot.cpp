@@ -61,6 +61,11 @@ ChatBot::ChatBot(ChatBot &&rhs)
       _chatLogic(rhs._chatLogic) {
   std::cout << "ChatBot move ctor called." << std::endl;
 
+  // IMPORTANT! Must set the chatbot handle in chatlogic to this.
+  // After task 5, every node possesses a chatbot instance
+  // Moving the chatbot around requires the chatbot handle in chatlogic to be updated as well.
+  _chatLogic->SetChatbotHandle(this);
+
   // Move _image
   _image = rhs._image;
   rhs._image = nullptr;
@@ -110,6 +115,11 @@ ChatBot &ChatBot::operator=(ChatBot &&rhs) {
   _rootNode = rhs._rootNode;
   _chatLogic = rhs._chatLogic;
   _image = rhs._image;
+
+  // IMPORTANT! Must set the chatbot handle in chatlogic to this.
+  // After task 5, every node possesses a chatbot instance
+  // Moving the chatbot around requires the chatbot handle in chatlogic to be updated as well.
+  _chatLogic->SetChatbotHandle(this);
 
   // Invalidate members of source
   rhs._currentNode = nullptr;
