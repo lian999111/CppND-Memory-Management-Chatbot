@@ -1,46 +1,52 @@
 #ifndef CHATBOT_H_
 #define CHATBOT_H_
 
-#include <wx/bitmap.h>
 #include <string>
+#include <wx/bitmap.h>
 
 class GraphNode; // forward declaration
 class ChatLogic; // forward declaration
 
-class ChatBot
-{
+class ChatBot {
 private:
-    // data handles (owned)
-    wxBitmap *_image; // avatar image
+  // data handles (owned)
+  wxBitmap *_image; // avatar image
 
-    // data handles (not owned)
-    GraphNode *_currentNode;
-    GraphNode *_rootNode;
-    ChatLogic *_chatLogic;
+  // data handles (not owned)
+  GraphNode *_currentNode;
+  GraphNode *_rootNode;
+  ChatLogic *_chatLogic;
 
-    // proprietary functions
-    int ComputeLevenshteinDistance(std::string s1, std::string s2);
+  // proprietary functions
+  int ComputeLevenshteinDistance(std::string s1, std::string s2);
 
 public:
-    // constructors / destructors
-    ChatBot();                     // constructor WITHOUT memory allocation
-    ChatBot(std::string filename); // constructor WITH memory allocation
-    ~ChatBot();
+  // constructors / destructors
+  ChatBot();                     // constructor WITHOUT memory allocation
+  ChatBot(std::string filename); // constructor WITH memory allocation
+  ~ChatBot();
 
-    //// STUDENT CODE
-    ////
+  //// STUDENT CODE
+  ////
 
-    ////
-    //// EOF STUDENT CODE
+  // Rule of five
+  ChatBot(const ChatBot &lhs); // copy ctor
+  ChatBot(ChatBot &&lhs);      // move ctor
 
-    // getters / setters
-    void SetCurrentNode(GraphNode *node);
-    void SetRootNode(GraphNode *rootNode) { _rootNode = rootNode; }
-    void SetChatLogicHandle(ChatLogic *chatLogic) { _chatLogic = chatLogic; }
-    wxBitmap *GetImageHandle() { return _image; }
+  ChatBot &operator=(const ChatBot &lhs); // copy assignment
+  ChatBot &operator=(ChatBot &&lhs);      // move assignment
 
-    // communication
-    void ReceiveMessageFromUser(std::string message);
+  ////
+  //// EOF STUDENT CODE
+
+  // getters / setters
+  void SetCurrentNode(GraphNode *node);
+  void SetRootNode(GraphNode *rootNode) { _rootNode = rootNode; }
+  void SetChatLogicHandle(ChatLogic *chatLogic) { _chatLogic = chatLogic; }
+  wxBitmap *GetImageHandle() { return _image; }
+
+  // communication
+  void ReceiveMessageFromUser(std::string message);
 };
 
 #endif /* CHATBOT_H_ */
