@@ -11,6 +11,7 @@ GraphNode::~GraphNode()
     //// STUDENT CODE
     ////
 
+    // Intended bug fixed
     // No need to delete _chatBot here since it's not owned by GraphNode
     // delete _chatBot; 
 
