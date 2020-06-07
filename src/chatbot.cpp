@@ -68,6 +68,11 @@ ChatBot::ChatBot(ChatBot &&rhs)
 
   // Move _image
   _image = rhs._image;
+
+  // Invalidate source's pointers
+  rhs._currentNode = nullptr;
+  rhs._rootNode = nullptr;
+  rhs._chatLogic = nullptr;
   rhs._image = nullptr;
 }
 
